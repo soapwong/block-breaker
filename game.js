@@ -11,7 +11,7 @@ var Paddle = function() {
     var o = {
         image: image,
         x: 100,
-        y: 200,
+        y: 250,
         speed: 8,
     }
     var paddle = o
@@ -24,7 +24,7 @@ var Paddle = function() {
     o.collide = function(ball) {
         if (ball.y + ball.image.height > o.y) {
             if (ball.x > o.x && ball.x < o.x + o.image.width) {
-                log('bomb')
+                // log('bomb')
                 return true
             }
         }
@@ -39,8 +39,8 @@ var Ball = function() {
         image: image,
         x: 100,
         y: 200,
-        speedX: 10,
-        speedY: 10,
+        speedX: 5,
+        speedY: 5,
         fired: false,
     }
     o.fire = function() {
@@ -60,9 +60,42 @@ var Ball = function() {
             o.y += o.speedY
         }
     }
+    o.bounce = function() {
+        o.speedY *= -1
+    }
     return o
 }
 
+var rectIntersects = function(a, b) {
+    var o = a
+    if (b.y > o.y && b.y < o.y + o.image.height) {
+        if (b.x > o.x && b.x < o.x + o.image.width) {
+            return true
+        }
+    }
+    return false
+}
+
+var Block = function () {
+    var image = imageFromPath('block.png')
+    var o = {
+        image: image,
+        x: 100,
+        y: 100,
+        w: 50,
+        h: 20,
+        alive: true,
+    }
+    o.kill = function() {
+        o.alive = false
+    }
+    o.collide = function(b) {
+        return o.alive && (rectIntersects(o, b) || rectIntersects(b, o))
+    }
+    return o
+}
+
+// game
 var SoapGame = function() {
     var g = {
         actions: {},
@@ -104,7 +137,7 @@ var SoapGame = function() {
         context.clearRect(0, 0, canvas.width, canvas.height)
         // draw
         g.draw()
-    }, 1000/30)
+    }, 1000/60)
 
     return g
 }
@@ -114,6 +147,15 @@ var __main = function() {
 
     var paddle = Paddle()
     var ball = Ball()
+
+    var blocks = []
+    for (var i = 0; i < 3; i++) {
+        var b = Block()
+        // 设置 block 坐标
+        b.x = i * 150
+        b.y = 50
+        blocks.push(b)
+    }
 
     // events
     game.registerAction('a', function() {
@@ -130,14 +172,33 @@ var __main = function() {
         ball.move()
         // 判断相撞，两个图形相交
         if (paddle.collide(ball)) {
-            // 应该调用一个反弹 ball.xx()
-            ball.speedY *= -1
+            // 应该调用一个反弹 ball.bounce()
+            ball.bounce()
+        }
+        // 判断 ball 和 block 相撞
+        for (var i = 0; i < blocks.length; i++) {
+            var block = blocks[i]
+            if (block.collide(ball)) {
+                log('block 相撞')
+                block.kill()
+                ball.bounce()
+            }
         }
     }
+
     game.draw = function() {
         // draw
         game.drawImage(paddle)
         game.drawImage(ball)
+
+        // dram blocks
+        for (var i = 0; i < blocks.length; i++) {
+            var block = blocks[i]
+            if (block.alive) {
+                game.drawImage(block)
+            }
+        }
+
     }
 }
 
