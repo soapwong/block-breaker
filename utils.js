@@ -1,5 +1,3 @@
-var log = console.log.bind(console)
-
 var e = function(selector) {
     var element = document.querySelector(selector)
     if (element === null) {
@@ -9,6 +7,8 @@ var e = function(selector) {
         return element
     }
 }
+
+var log = console.log.bind(console)
 
 var imageFromPath = function(path) {
     var img = new Image()
