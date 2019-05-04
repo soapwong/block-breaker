@@ -85,9 +85,34 @@ var __main = function() {
                 }
             }
         }
+        // 鼠标拖拽
+        var enableDrag = false
+        game.canvas.addEventListener('mousedown', function(event) {
+            var x = event.offsetX
+            var y = event.offsetY
+            if (ball.hasPoint(x, y)) {
+                enableDrag = true
+            }
+        })
+        game.canvas.addEventListener('mousemove', function(event) {
+            var x = event.offsetX
+            var y = event.offsetY
+            if (enableDrag) {
+                ball.x = x
+                ball.y = y
+            }
+        })
+        game.canvas.addEventListener('mouseup', function(event) {
+            var x = event.offsetX
+            var y = event.offsetY
+            enableDrag = false
+        })
 
         game.draw = function() {
             // draw
+            game.context.fillStyle = "#2c3e50"
+            game.context.fillRect(0, 0, 400, 300)
+
             game.drawImage(paddle)
             game.drawImage(ball)
 
@@ -99,8 +124,7 @@ var __main = function() {
                 }
             }
             // draw labels
-            game.context.fillText('分数: ' + score, 10, 290);
-
+            game.context.fillText('分数: ' + score, 10, 290)
         }
     })
 
