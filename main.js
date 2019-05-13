@@ -10,8 +10,6 @@ var loadlevel = function(game, n) {
     return blocks
 }
 
-// TODO，临时放这里
-var blocks = []
 var enableDebugMode = function(game, enable) {
     if (!enable) {
         return
@@ -20,7 +18,7 @@ var enableDebugMode = function(game, enable) {
     window.paused = !window.paused
     window.addEventListener('keydown', function(event) {
         var k = event.key
-        if (k == 'p') {
+        if (k === 'p') {
             // 暂停
             paused = !paused
         } else if ('12345678'.includes(k)) {
@@ -36,101 +34,18 @@ var enableDebugMode = function(game, enable) {
 }
 
 var __main = function() {
-
     var images = {
         ball: 'ball.png',
         block: 'block.png',
         paddle: 'paddle.png',
     }
+
     var game = SoapGame(30, images, function(g) {
-        var paddle = Paddle(game)
-        var ball = Ball(game)
-
-        var score = 0
-
-        blocks = loadlevel(game, 1)
-        var paused = false
-
-        // events
-        game.registerAction('a', function() {
-            paddle.moveLeft()
-        })
-        game.registerAction('d', function() {
-            paddle.moveRight()
-        })
-        game.registerAction('f', function() {
-            ball.fire()
-        })
-
-
-        game.update = function() {
-            if (window.paused) {
-                return
-            }
-            ball.move()
-            // 判断相撞，两个图形相交
-            if (paddle.collide(ball)) {
-                // 应该调用一个反弹 ball.bounce()
-                ball.bounce()
-            }
-            // 判断 ball 和 block 相撞
-            for (var i = 0; i < blocks.length; i++) {
-                var block = blocks[i]
-                if (block.collide(ball)) {
-                    // log('block 相撞')
-                    block.kill()
-                    ball.bounce()
-                    // 更新分数
-                    score += 100
-                }
-            }
-        }
-        // 鼠标拖拽
-        var enableDrag = false
-        game.canvas.addEventListener('mousedown', function(event) {
-            var x = event.offsetX
-            var y = event.offsetY
-            if (ball.hasPoint(x, y)) {
-                enableDrag = true
-            }
-        })
-        game.canvas.addEventListener('mousemove', function(event) {
-            var x = event.offsetX
-            var y = event.offsetY
-            if (enableDrag) {
-                ball.x = x
-                ball.y = y
-            }
-        })
-        game.canvas.addEventListener('mouseup', function(event) {
-            var x = event.offsetX
-            var y = event.offsetY
-            enableDrag = false
-        })
-
-        game.draw = function() {
-            // draw
-            game.context.fillStyle = "#2c3e50"
-            game.context.fillRect(0, 0, 400, 300)
-
-            game.drawImage(paddle)
-            game.drawImage(ball)
-
-            // dram blocks
-            for (var i = 0; i < blocks.length; i++) {
-                var block = blocks[i]
-                if (block.alive) {
-                    game.drawImage(block)
-                }
-            }
-            // draw labels
-            game.context.fillText('分数: ' + score, 10, 290)
-        }
+        var s = Scene(g)
+        g.runWithScene(s)
     })
 
     enableDebugMode(game, true)
-
-
 }
 
 __main()
