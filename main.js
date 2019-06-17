@@ -35,9 +35,9 @@ var enableDebugMode = function(game, enable) {
 
 var __main = function() {
     var images = {
-        ball: 'ball.png',
-        block: 'block.png',
-        paddle: 'paddle.png',
+        ball: 'img/ball.png',
+        block: 'img/block.png',
+        paddle: 'img/paddle.png',
     }
 
     var game = SoapGame(30, images, function(g) {
