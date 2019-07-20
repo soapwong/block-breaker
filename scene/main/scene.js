@@ -48,7 +48,7 @@ var Scene = function(game) {
         // 判断游戏结束
         if (ball.y > paddle.y) {
             // 跳转到 游戏结束 的 scene
-            var end = SceneEnd(game)
+            var end = SceneEnd.new(game)
             game.replaceScene(end)
         }
         // 判断相撞，两个图形相交

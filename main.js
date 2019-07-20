@@ -40,8 +40,8 @@ var __main = function() {
         paddle: 'img/paddle.png',
     }
 
-    var game = SoapGame(30, images, function(g) {
-        var s = Scene(g)
+    var game = SoapGame.instance(30, images, function(g) {
+        var s = SceneTitle.new(g)
         g.runWithScene(s)
     })
 
