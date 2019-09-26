@@ -9,7 +9,6 @@ var Paddle = function(game) {
     o.x = 100
     o.y = 250
     o.speed = 15
-    var paddle = o
     o.move = function(x) {
         if (x < 0) {
             x = 0
@@ -20,10 +19,10 @@ var Paddle = function(game) {
         o.x = x
     }
     o.moveLeft = function() {
-        o.move(paddle.x - paddle.speed)
+        o.move(o.x - o.speed)
     }
     o.moveRight = function() {
-        o.move(paddle.x + paddle.speed)
+        o.move(o.x + o.speed)
     }
 
     var aInb = function(x, x1, x2) {

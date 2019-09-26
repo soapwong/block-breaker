@@ -1,4 +1,4 @@
-var loadlevel = function(game, n) {
+var loadLevel = function(game, n) {
     n = n - 1
     var blocks = []
     var level = levels[n]
@@ -14,8 +14,8 @@ var enableDebugMode = function(game, enable) {
     if (!enable) {
         return
     }
-    // TODO, paused 有 bug, 全局变量放着
-    window.paused = !window.paused
+
+    window.paused = false
     window.addEventListener('keydown', function(event) {
         var k = event.key
         if (k === 'p') {
@@ -23,7 +23,7 @@ var enableDebugMode = function(game, enable) {
             paused = !paused
         } else if ('12345678'.includes(k)) {
             // 临时做的载入关卡
-            blocks = loadlevel(game, Number(k))
+            blocks = loadLevel(game, Number(k))
         }
     })
     // 控制速度
@@ -40,7 +40,7 @@ var __main = function() {
         paddle: 'img/paddle.png',
     }
 
-    var game = SoapGame.instance(30, images, function(g) {
+    var game = GuaGame.instance(30, images, function(g) {
         var s = SceneTitle.new(g)
         g.runWithScene(s)
     })

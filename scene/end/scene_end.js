@@ -1,4 +1,4 @@
-class SceneEnd extends SoapScene {
+class SceneEnd extends GuaScene {
     constructor(game) {
         super(game)
         game.registerAction('r', function() {

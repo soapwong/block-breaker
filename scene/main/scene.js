@@ -8,7 +8,7 @@ var Scene = function(game) {
 
     var score = 0
 
-    var blocks = loadlevel(game, 1)
+    var blocks = loadLevel(game, 1)
 
     // events
     game.registerAction('a', function() {
